@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Product Manager</title>
+  <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css" />
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+
+  <style>
+    .form {
+      text-align: center;
+    }
+    .form-contain {
+      width: 40%;
+      margin: auto;
+      background-color: cadetblue;
+      border-radius: 5px;
+    }
+
+    .from-group {
+      padding: 20px 0 10px;
+      margin: 10px 20px;
+      width: 80%;
+      display: flex;
+      justify-content: space-between;
+      line-height: 30px;
+      color: white;
+    }
+
+    .from-group > input {
+      border: none;
+      border-radius: 2px;
+      width: 60%;
+    }
+
+    .from-group > label {
+      letter-spacing: 2px;
+    }
+
+    .btn-login {
+      padding: 10px 20px;
+      margin: 20px;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-forgot-password {
+      padding-bottom: 20px;
+    }
+    .btn-forgot-password > a{
+      text-decoration: none;
+      color: black;
+    }
+    .btn-google {
+      background-color: #216eb9;
+      text-align: center;
+      display: inline-block;
+      padding: 10px 15px;
+      margin: 10px;
+    }
+    .btn-google > a {
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+<div class="form">
+  <h1 class="mt-4">Please Login</h1>
+
+  <div>
+    <h4 class="btn-google"><a th:href="@{/oauth2/authorization/google}">Login with Google</a></h4>
+  </div>
+
+  <div th:if="${param.error}">
+    <p class="text-danger" >[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+  </div>
+
+  <div th:if="${message != null}">
+    <p class="text-danger">[[${message}]]</p>
+  </div>
+
+  <div th:if="${param.otp}">
+    <p class="text-danger" >For security reason, we've sent an One-Time-Password (OTP)
+      to your email [[${param.email}]]<br/>
+      Kindly check your email and use the provided OTP to login.<br>
+      Note: The OTP will expire after 5 minutes.</p>
+  </div>
+
+  <div class="form-contain mt-3">
+    <form method="post" th:action="@{/login}">
+      <div class="from-group">
+        <label>Username: </label>
+        <input type="email" name="email" th:value="${param.email}"/>
+      </div>
+
+      <div class="from-group">
+        <label>Password: </label>
+        <input type="password" th:name="password" th:placeholder="${param.otp != null ? 'Your One-Time Password' : ''}"/>
+      </div>
+
+      <div style="color: white; margin-top: 20px">
+        <input type="checkbox" name="remember-me"> Remember me
+      </div>
+      <div>
+        <button class="btn-login" type="submit">Login</button>
+      </div>
+      <div class="btn-forgot-password">
+        <a th:href="@{/forgot_password}">Forgot your password?</a>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
